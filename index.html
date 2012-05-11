@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Franz - Functional Canvas Lib</title>
+<script src="lib/jquery-1.7.2.min.js"></script>
+<script src="lib/franz_imagefilters_fork.js"></script>
+<script src="lib/dataurls.js"></script>
+<script src="lib/main.js"></script>
+<script src="lib/example.js"></script>
+</head>
+<style type="text/css">
+body {width: 800px}
+code { display: block; unicode-bidi: embed; font-family: monospace; white-space: pre; background-color:lightgray; margin:5px; padding: 5px; }
+.code { unicode-bidi: embed; font-family: monospace; white-space: pre; background-color:lightgray; }
+</style>
+<body>
+<h1>Franz - Functional Canvas Photo Effects Lib</h1>
+<h2>MIT License</h2>
+<p>Franz (Canvas I/O) is a
+<ul>
+  <li>Functional</li>
+  <li>HTML5 Canvas Element</li>
+  <li>Photo Effects</li>
+  <li>CoffeeScript Libarary</li>
+</ul>
+
+Franz focuses on reuseability. Franz wastes Canvases like crazy. You put an canvas in ther, a canvas comes out. But hey, not the same canvas, but a complete new one. So cool. Yes, this is a waste of canvases, but it makes code reusability so much easiere.
+
+
+</p>
+<hr>
+<h3>
+The Script</h3>
+Even though Franz (in it's minified form) works dependency less, for
+the examples below we use jQuery
+<code>&lt;script src="jquery-1.7.2.min.js"&gt;&lt;/script&gt;
+&lt;script src="$PATH_TO_CANIO/lib/min.js"&gt;&lt;/script&gt;
+</code>
+Oh, all examples are ofcourse written in CoffeeScript.
+
+
+
+</hr>
+<hr>
+<h3>An Image</h3>
+First we need an Image
+<div><img src="test2.png" id="testimage"></div>
+<code>&lt;img src="test.png" id="testimage" &gt;</code><br>
+Yeah, that's me sitting on a rock in Colombia.
+<hr>
+<h3>Franz.byImage(img, callback)</h3>
+First we turn an image into a canvas. (<strong>&darr;</strong> That's a Canvas!) 
+<div id="byImage_placeholder"></div>
+<code># example 1
+# the window.load event fires after everything (especially the images)
+# are ready
+$(window).load(() ->
+  #getting the image element
+  img = $('#testimage')[0] 
+  # rendering the canvas
+  # into the &lt;div id="byImage_placeholder"&gt;&lt;/div&gt; element
+  Franz.byImage(img,(c)->$('#byImage_placeholder').html(c)) 
+)
+</code>
+Ok, one important part when working with images is, the image must be 'loaded'. This means, that the image must not only be an element in the DOM, but must be completely loaded, otherwise everything you want to do with the image won't work - especially turning it into a canvas won't work. There are two ways to solve this: either wait until the <span class="code">$(img).on('load', ...)</span> event has been fired, or the <span class="code">$(window).on('load', ...)</span> event has been fired (which fires after all the external dependencies has been loaded). Refusing to wait until to the image has been 'loaded' will result into strange bugs down the road. Said that: Franz includes a saftey logic that waits for images to load.
+<hr>
+<h3>Franz.resize(canvas, max_width, max_height, min_width,
+min_height, resize_preference, callback)</h3>
+<div id="resize_placeholder"></div>
+<code>  #example 2
+  Franz.byImage(img,(c)->
+    Franz.resize(c, 400,300, 200, 100, (c) ->
+      c.id='resizedcanvas'
+      $('#resize_placeholder').html(c)
+      )
+    )
+</code>
+<hr>
+<h3>on('canvasready')</h3>
+In this tutorial, as in real life, we do not want to create canvases out of the same image over and over again, in the same time we don't want to go to callback-hell (sticking callbacks in callbacks of callbacks). Throwing a custom events from time to time i.e.: when a canvas is ready helps (a little). 
+
+<code>  #example 3
+  img = $('#testimage')[0]
+  $(img).on('canvasready', (event,c)->
+    Franz.resize(c, 400, 300, 200, 100, (c) ->
+      c.id='resizedcanvas'
+      $('#resize_placeholder').html(c)
+      )
+    )
+
+  Franz.byImage(img,(c) ->
+    c.id='canvasbyimage'
+    $('#byImage_placeholder').html(c)
+    $(img).trigger('canvasready', c)
+    )
+</code>
+Basically we fire a "<b>canvasready</b>" event after the image was successfully transformed into a canvas. The event forwards the newly created canvas to the function. I (still) love jQuery, but i didn't want to bring in any jQuery dependencies - so you have, if you want to, implement the <span class="code">trigger('canvasready', c)</span> logic yourself. just keep in mind, that "example-code 2" and "example-code 3" basically do the same stuff. It's just a question of style and application logic.
+<p class="note">
+<b>Note:</b> What is <span class="code">c.id='resizedcanvas'</span> and <span class="code">c.id='canvascool'</span> actuall doing? Well, what it says, it sets the  <span class="code">id=""</span> attribute of the new canvas tag. Why is this important? Oh boy, we are taking a deep dive into the Franz lib now. To keep it simple. Every time a new canvas gets created (with every functionc call) it sets the custom <span class="code">origin=""</span> attribute of the canvas tag, to the last  <span class="code">id=""</span> attribute it encountered. Withthe <span class="code">origin=""</span> attribute the canvas basically know the id of its father (if he had a name, otherwise he knows the name of its grandfather or grand-grandfather ...). As live is much simple if every element has a unique id, it's a good idea to set a unique id as soon as you display an element on-page (and it's an even better idea want to reuse the canvas as input later).
+i.e.: the canvas of "example-code 3" has the html code <span class="code">&lt;canvas width="400" height="300" origin="canvasbyimage" id="resizedcanvas"&gt;&lt;/canvas&gt;</span>
+</p>
+<hr>
+<h3>Franz.scale(canvas, factor, callback)</h3>
+<div id="scale_placeholder"></div>
+Ok, not lets take the canvas (not the resized one, but the one we created from the image) and scale it down to 10%
+<code>  #example 4
+  $(img).on('canvasready', (e,c)->
+    Franz.scale(c, 0.1, (c) ->
+      c.id='scaledcanvas'
+      $('#scale_placeholder').html(c)
+      )
+    )
+</code>
+the outcome is
+<code>&lt;canvas width="80" height="60" origin="canvasbyimage" id="scaledcanvas">&gt;&lt;/canvas&gt;</code>
+<hr>
+<h3>Franz.crop(canvas, crop_x, crop_y, crop_width, crop_height, callback)</h3>
+<div id="crop_placeholder"></div>
+<code>  #example 5
+  $(img).on('canvasready', (e,c)->
+    Franz.crop(c, 580, 330, 100, 100, (c) ->
+      c.id='cropedcanvas'
+      $('#crop_placeholder').html(c)
+      )
+    )
+</code>
+<hr>
+<h3>Franz.invert(canvas, callback)</h3>
+<div id="invert_placeholder"></div>
+<code>  $(img).on('canvasready', (e,c)->
+    Franz.invert(c, (c) ->
+      $('#invert_placeholder').html(c)
+      )
+    )</code>
+<hr>
+<h3>Franz.mosaic(canvas, blocksize, callback)</h3>
+<div id="mosaic_placeholder"></div>
+<code>  $(img).on('canvasready', (e,c)->
+    Franz.mosaic(c, 8, (c) ->
+      $('#mosaic_placeholder').html(c)
+      )
+    )</code>
+blocksize ... positve pixel size integer
+<hr>
+<h3>Franz.binarize(canvas, threshold, callback)</h3>
+<div id="binarize_placeholder"></div>
+<code>  $(img).on('canvasready', (e,c)->
+    Franz.binarize(c, 0.5, (c) ->
+      $('#binarize_placeholder').html(c)
+      )
+    )</code>
+threshold ... value between 0 and 2 makes sense
+<hr>
+<h3>Franz.noise(canvas, amount, callback)</h3>
+<div id="noise_placeholder"></div>
+<code></code>
+amount ... amount of noise, from 0 to n
+<hr>
+<h3>Franz.vignette(canvas, white, black, callback)</h3>
+<div id="vignette_placeholder"></div>
+<code></code>
+<ul>
+  <li>white ... 0 to 1</li>
+  <li>black ... 0 to 1</li>
+</ul>
+<hr>
+<h3>Franz.saturate(canvas, t, callback)</h3>
+<div id="saturate_placeholder"></div>
+<code></code>
+<ul>
+  <li>t ... 0 to 1</li>
+</ul>
+<hr>
+<h3>Franz.desaturate(canvas, t, callback)</h3>
+<div id="desaturate_placeholder"></div>
+<code></code>
+<ul>
+  <li>t ... 0 to 1</li>
+</ul>
+<hr>
+<h3>Franz.curve(canvas, callback)</h3>
+<div id="curve_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.screen(canvas, green, red, blue, strength, callback)</h3>
+<div id="screen_placeholder"></div>
+<code></code>
+<img src="sofortbildkamera.png" id="viewfinder">-->
+<hr>
+<h3>Franz.viewfinder(canvas, callback)</h3>
+<div id="viewfinder_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.oldschool(canvas, callback)</h3>
+<div id="oldschool_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.many(canvas, actions, params, callback)</h3>
+<div id="many_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.oil(canvas, range, levels, callback)</h3>
+<div id="oil_placeholder"></div>
+<code>  $(img).on('canvasready', (e,c)->
+    oilbutton = $('&lt;button&gt;Click Me!&lt;/button&gt;').on('click', () ->
+      Franz.oil(c, 4, 30, (c) ->$('#oil_placeholder').html(c)
+      )
+    )
+    $('#oil_placeholder').html(oilbutton)
+  )</code>
+<hr>
+<h3>Franz.removeNoise(canvas, callback)</h3>
+<div id="removenoise_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.schemer(canvas, red_threshold_array, green_threshold_array, blue_threshold_array, alpha_threshold_array, red_threshold_values, green_threshold_values, blue_threshold_values, alpha_threshold_values, callback)</h3>
+<div id="schemer_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.reduceAndReplace</h3>
+<div id="reduceandreplace_placeholder"></div>
+<code></code>
+<hr>
+<h3>Franz.applyIfRgba</h3>
+<div id="applyifrgba_placeholder"></div>
+<code></code>
+
+<br><br><br>
+<hr>
+<!-- hhmts start -->Last modified: Thu May 10 19:55:03 EST 2012 <!-- hhmts end -->
+</body> </html>
