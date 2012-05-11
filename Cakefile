@@ -4,7 +4,16 @@ fs     = require 'fs'
 appFiles  = [
   # omit src/ and .coffee to make the below lines a little shorter
 #  'dataurls'
-  'main'
+  'init'
+  'helper'
+  'resizer'
+  'rotater'
+  'merger'
+  'adjuster'
+  'meta'
+  'simplergba'
+  'advanced'
+  'imagefilterswrappers'
 ]
 
 task 'build', 'Build single application file from source files', ->

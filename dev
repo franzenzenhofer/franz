@@ -36,7 +36,7 @@ tell application "Terminal"
  do script "ls" in the last tab of window 1
 end tell'
 
-open -a /Applications/TextWrangler.app lib/main.js 
+open -a /Applications/TextWrangler.app devlib/*.js 
 open -a /Applications/Aquamacs.app src/*.coffee index.html
 open http://localhost:3000/
-coffee --watch --compile --output lib/ src/
+coffee --watch --compile --output devlib/ src/

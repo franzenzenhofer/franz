@@ -4,6 +4,7 @@ $(window).load(() ->
   dlog = (msg) -> console.log msg if _DEBUG_
   #dlog('DEBUG MODUS')
   img = $('#testimage')[0]
+  window.img = img
   #$(img).bind('canvasready', (e, c)->)
   #
   # as we want to keep the examples here kinda consisten to what is in the documentation
@@ -85,21 +86,21 @@ $(window).load(() ->
 
   #viewfinder border
   $(img).on('canvasready', (e,c)->
-    Franz.viewfinder(c, (c) ->
+    Franz.viewfinder(c, null, (c) ->
       $('#viewfinder_placeholder').html(c)
       )
     )
 
   #oldschool border
   $(img).on('canvasready', (e,c)->
-    Franz.oldschool(c, (c) ->
+    Franz.oldschool(c, null, (c) ->
       $('#oldschool_placeholder').html(c)
       )
     )
   #many
   $(img).on('canvasready', (e,c)->
     actions =[ Franz.curve,  Franz.scale, Franz.screen, Franz.saturate, Franz.vignette, Franz.oldschool, Franz.toImage]
-    params = [[],0.8,[227, 12, 169, 0.40],0.9,[0.2, 0.8],[],[]]
+    params = [[],0.8,[227, 12, 169, 0.40],0.9,[0.2, 0.8],['./img/oldschool.png'],[]]
     Franz.many(c,actions, params, (c) ->
       $('#many_placeholder').html(c)
       )
@@ -152,6 +153,13 @@ $(window).load(() ->
     Franz.applyIfRgba(c, Franz.blackWhite, [], ((r,g,b,a,i) ->
       (if (r>g or b>g) then true else false)), (c) ->
       $('#applyifrgba_placeholder').html(c)
+      )
+    )
+
+
+  $(img).on('canvasready', (e,c)->
+    Franz.preserveYellow(c, (c) ->
+      $('#preserveyellow_placeholder').html(c)
       )
     )
 

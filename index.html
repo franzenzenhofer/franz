@@ -2,10 +2,13 @@
 <html> <head>
 <title>Franz - Functional Canvas Lib</title>
 <script src="lib/jquery-1.7.2.min.js"></script>
-<script src="lib/franz_imagefilters_fork.js"></script>
+<!--
 <script src="lib/dataurls.js"></script>
 <script src="lib/main.js"></script>
-<script src="lib/example.js"></script>
+
+<script src="lib/franz_imagefilters_fork.js"></script>-->
+<script src="lib/min.js"></script>
+<script src="devlib/example.js"></script>
 </head>
 <style type="text/css">
 body {width: 800px}
@@ -13,29 +16,48 @@ code { display: block; unicode-bidi: embed; font-family: monospace; white-space:
 .code { unicode-bidi: embed; font-family: monospace; white-space: pre; background-color:lightgray; }
 </style>
 <body>
-<h1>Franz - Functional Canvas Photo Effects Lib</h1>
-<h2>MIT License</h2>
-<p>Franz (Canvas I/O) is a
+<h1>Franz.coffee</h1>
+<h2>A Functional HTML5 Canvas Photo Effects Lib in CoffeeScript<br>(Hipster Alert)</h2>
+<h3>MIT License</h3>
+
+<b>About Franz:</b>
 <ul>
-  <li>Functional</li>
-  <li>HTML5 Canvas Element</li>
-  <li>Photo Effects</li>
-  <li>CoffeeScript Libarary</li>
+  <li>Franz focuses on reuseability.</li>
+  <li>Franz wastes Canvases like crazy.</li>
+  <li>You put an canvas in there</li>
+  <li>A canvas comes out.</li>
+  <li>But hey, not the same canvas, but a complete new one.</li>
+  <li>So cool.</li>
+  <li>Yes, this is a waste of canvases</li>
+  <li>It's the wrong way to do it - performance wise.</li>
+  <li>It'a the right thing to do - reusability wise.</li>
 </ul>
 
-Franz focuses on reuseability. Franz wastes Canvases like crazy. You put an canvas in ther, a canvas comes out. But hey, not the same canvas, but a complete new one. So cool. Yes, this is a waste of canvases, but it makes code reusability so much easiere.
-
-
+<p>
+The views expressed on this site are my own and <b>do represent</b> the views of my <a href="http://www.franz-enzenhofer.com/">employer</a>!<br><a href="http://www.franz-enzenhofer.com/">http://www.franz-enzenhofer.com/</a>
 </p>
+<p>
+Find me on
+<ul>
+  <li>Twitter <a href="https://twitter.com/enzenhofer">@enzenhofer</a></li>
+  <li>HN <a href="https://news.ycombinator.com/user?id=franze">franze</a></li>
+  <li><a href="http://www.linkedin.com/in/franzenzenhofer">LinkedIn</a></li>
+  <li><a href="https://www.xing.com/profile/Franz_Enzenhofer">Xing</a></li>
+  <li><a href="https://www.google.com/search?q=franz+enzenhofer&pws=0">Google</a> (minus plus)</li>
+  <li><a href="https://www.facebook.com/pages/Franz-Enzenhofer/156536657909">I even have a Facebook Fan-Page...<a></li>
+</ul>
+</p>
+
+
 <hr>
 <h3>
 The Script</h3>
 Even though Franz (in it's minified form) works dependency less, for
 the examples below we use jQuery
 <code>&lt;script src="jquery-1.7.2.min.js"&gt;&lt;/script&gt;
-&lt;script src="$PATH_TO_CANIO/lib/min.js"&gt;&lt;/script&gt;
+&lt;script src="$PATH_TO_FRANZ/lib/min.js"&gt;&lt;/script&gt;
 </code>
-Oh, all examples are ofcourse written in CoffeeScript.
+Oh, all examples are of course written in CoffeeScript.
 
 
 
@@ -223,8 +245,12 @@ amount ... amount of noise, from 0 to n
 <h3>Franz.applyIfRgba</h3>
 <div id="applyifrgba_placeholder"></div>
 <code></code>
+<hr>
+<h3>Franz.preserveYellow(canvas, callback)</h3>
+<div id="preserveyellow_placeholder"></div>
+<code></code>
 
 <br><br><br>
 <hr>
-<!-- hhmts start -->Last modified: Thu May 10 19:55:03 EST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Fri May 11 00:26:38 EST 2012 <!-- hhmts end -->
 </body> </html>
