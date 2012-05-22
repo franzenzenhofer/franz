@@ -129,9 +129,14 @@ Franz.reduceAndReplace = (c, p...) ->
     return [r2, g2, b2, a]
   Franz.rgba(c,cb,filter)
 
+Franz.c64 = (c, cb) -> Franz.reduceAndReplace(c,cb)
+
 #funny func, returns a <pre class="ascii"> tag
 Franz.ascii = (c, p...) ->
   [cb, ascii_string] = fff(p, '@GLftli;:,.  ')
+  asciiA=asciistring.split('')
+  nr_of_buckets=asciiA.length
+
 
 
 

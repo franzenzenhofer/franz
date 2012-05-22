@@ -1,6 +1,7 @@
 fs     = require 'fs'
 {exec} = require 'child_process'
 
+#IF A FILE GETS ADDED HERE; IT MUST GET ADDED TO THE DEV ENVIREMENT, TOO
 appFiles  = [
   # omit src/ and .coffee to make the below lines a little shorter
 #  'dataurls'
@@ -35,5 +36,15 @@ task 'build', 'Build single application file from source files', ->
 
 task 'minify', 'Minify the resulting application file after build', ->
   exec 'java -jar "/Users/franzseo/bin/compiler.jar" --compilation_level SIMPLE_OPTIMIZATIONS --js lib/franz_imagefilters_fork.js lib/dev.js --js_output_file lib/min.js', (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
+
+#task 'dev', 'setting up a dev compile and watch job', ->
+#  exec 'coffee --join under-development.js --watch --compile --output devlib/ src/init.coffee src/helper.coffee', (err, stdout, stderr) ->
+#    throw err if err
+#    console.log stdout + stderr
+
+task 'copy', 'copy to franzenzenhofer.github.com/franz/', ->
+  exec 'cp -R /Users/franzseo/dev/franz /Users/franzseo/dev/franzenzenhofer.github.com/', (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr

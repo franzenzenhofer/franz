@@ -30,4 +30,6 @@ Franz.applyIfRgba = (c, franz_filter, franz_filter_arguments, if_filter, cb) ->
 Franz.preserveGreen = (c, cb) -> Franz.applyIfRgba(c, Franz.blackWhite, [], ((r,g,b,a,i) -> (if (r>g or b>g) then true else false)), cb)
 Franz.preserveBlue = (c, cb) -> Franz.applyIfRgba(c, Franz.blackWhite, [], ((r,g,b,a,i) -> (if (r>b or g>b) then true else false)), cb)
 Franz.preserveRed = (c, cb) -> Franz.applyIfRgba(c, Franz.blackWhite, [], ((r,g,b,a,i) -> (if (g>r or b>r) then true else false)), cb)
-Franz.preserveYellow = (c, cb) -> Franz.applyIfRgba(c, Franz.blackWhite, [], ((r,g,b,a,i) -> (if (r>127 and g>127 and b < 50) then FALSE else TRUE)), cb)
+Franz.preserveYellow = (c, p...) ->
+  [cb, rt, gt, bt] = fff(p, 127,127,50)
+  Franz.applyIfRgba(c, Franz.blackWhite, [], ((r,g,b,a,i) -> (if (r>rt and g>gt and b < bt) then false else true)), cb)

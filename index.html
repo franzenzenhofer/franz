@@ -1,14 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
-<title>Franz - Functional Canvas Lib</title>
-<script src="lib/jquery-1.7.2.min.js"></script>
-<!--
-<script src="lib/dataurls.js"></script>
-<script src="lib/main.js"></script>
+<meta charset="utf-8">
+<title>Franz.coffee - Functional Canvas Lib</title>
+<!--if we have the development setup load these two files to init window.Franz -->
+<script src="lib/franz_imagefilters_fork.js"></script>
+<script src="devlib/under-development.js"></script>
+<!--if we don't have the development setup available, we try to load the minified production version -->
+<script>window.Franz || document.write('<script src="lib/min.js"><\/script><script>window.franz_prod_setup=true<\/script>')</script>
+<!-- if we do not have any Franz, we throw the ugliest of error messages-->
+<script>window.Franz || document.write('<script>alert("☠ ☠ ☠ Could not load Franz.coffee! ☠ ☠ ☠ This error message is intentionally ugly! ☠ ☠ ☠")<\/script>')</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="lib/jquery-1.7.2.min.js"><\/script>')</script>
 
-<script src="lib/franz_imagefilters_fork.js"></script>-->
-<script src="lib/min.js"></script>
-<script src="devlib/example.js"></script>
+<script src="sample/example.js"></script>
 </head>
 <style type="text/css">
 body {width: 800px}
@@ -27,6 +31,7 @@ code { display: block; unicode-bidi: embed; font-family: monospace; white-space:
   <li>You put an canvas in there</li>
   <li>A canvas comes out.</li>
   <li>But hey, not the same canvas, but a complete new one.</li>
+  <li><b>No side-effects</b></li>
   <li>So cool.</li>
   <li>Yes, this is a waste of canvases</li>
   <li>It's the wrong way to do it - performance wise.</li>
@@ -57,7 +62,10 @@ the examples below we use jQuery
 <code>&lt;script src="jquery-1.7.2.min.js"&gt;&lt;/script&gt;
 &lt;script src="$PATH_TO_FRANZ/lib/min.js"&gt;&lt;/script&gt;
 </code>
-Oh, all examples are of course written in CoffeeScript.
+<script>if(window.franz_prod_setup===true){ document.write('<div>Currently (on this page, at this moment) the  /min.js version of Franz.coffee is used!<\/div>');}else{document.write('<div>Currently (on this page, at this moment) the the <b>development<\/b> version of Franz.coffee is used!<\/div>');}  </script>
+<div>    
+<br>Oh, all examples are of course written in CoffeeScript.
+</div>
 
 
 
@@ -84,6 +92,8 @@ $(window).load(() ->
 )
 </code>
 Ok, one important part when working with images is, the image must be 'loaded'. This means, that the image must not only be an element in the DOM, but must be completely loaded, otherwise everything you want to do with the image won't work - especially turning it into a canvas won't work. There are two ways to solve this: either wait until the <span class="code">$(img).on('load', ...)</span> event has been fired, or the <span class="code">$(window).on('load', ...)</span> event has been fired (which fires after all the external dependencies has been loaded). Refusing to wait until to the image has been 'loaded' will result into strange bugs down the road. Said that: Franz includes a saftey logic that waits for images to load.
+<br><br>
+<b>Note:</b>Also the image must be within the "same origin restriction" to be handled in canvas (otherwise you get a DOM Security Exception. Yes, it's annoying, but there are workarounds (links to the jquery thingie or write a small server)
 <hr>
 <h3>Franz.resize(canvas, max_width, max_height, min_width,
 min_height, resize_preference, callback)</h3>
@@ -206,7 +216,6 @@ amount ... amount of noise, from 0 to n
 <h3>Franz.screen(canvas, green, red, blue, strength, callback)</h3>
 <div id="screen_placeholder"></div>
 <code></code>
-<img src="sofortbildkamera.png" id="viewfinder">-->
 <hr>
 <h3>Franz.viewfinder(canvas, callback)</h3>
 <div id="viewfinder_placeholder"></div>
@@ -242,15 +251,19 @@ amount ... amount of noise, from 0 to n
 <div id="reduceandreplace_placeholder"></div>
 <code></code>
 <hr>
+<h3>Franz.c64</h3>
+<div id="c64_placeholder"></div>
+<code></code>
+<hr>
 <h3>Franz.applyIfRgba</h3>
 <div id="applyifrgba_placeholder"></div>
 <code></code>
 <hr>
-<h3>Franz.preserveYellow(canvas, callback)</h3>
+<h3>Franz.preserveYellow(canvas[, red_threshold=127, green_threshold=127, blue_threshold=50], callback)</h3>
 <div id="preserveyellow_placeholder"></div>
 <code></code>
 
 <br><br><br>
 <hr>
-<!-- hhmts start -->Last modified: Fri May 11 00:26:38 EST 2012 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue May 22 15:40:46 BOT 2012 <!-- hhmts end -->
 </body> </html>

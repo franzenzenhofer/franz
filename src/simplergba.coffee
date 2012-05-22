@@ -3,6 +3,10 @@ Franz.nothing = (c, p...) ->
   filter = (r,g,b,a) -> [r,g,b,a]
   Franz.rgba(c,cb,filter)
 
+Franz.invert = (c,p...)->
+  [cb]=fff(p)
+  Franz.rgba(c,cb,((r,g,b,a)->[255-r,255-g,255-b,a]))
+
 Franz.saturate =  (c, p...) ->
   [cb, t]=fff(p, 0.3)
   filter = (r,g,b,a) ->

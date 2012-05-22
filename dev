@@ -24,6 +24,22 @@ tell application "Terminal"
  do script "serve 3000" in the last tab of window 1
 end tell
 
+-- compile and watch example.js
+
+tell application "System Events"
+ tell process "Terminal"
+ keystroke "t" using command down
+ end tell
+end tell
+
+delay 1 -- it seems we need this
+
+tell application "Terminal"
+ do script "coffee --watch --compile ./sample/example.coffee" in the last tab of window 1
+end tell
+
+-- open a final terminal and list files
+
 tell application "System Events"
  tell process "Terminal"
  keystroke "t" using command down
@@ -36,7 +52,19 @@ tell application "Terminal"
  do script "ls" in the last tab of window 1
 end tell'
 
-open -a /Applications/TextWrangler.app devlib/*.js 
-open -a /Applications/Aquamacs.app src/*.coffee index.html
+#open -a /Applications/TextWrangler.app devlib/*.js 
+open -a /Applications/Aquamacs.app src/*.coffee index.html dev Cakefile
 open http://localhost:3000/
-coffee --watch --compile --output devlib/ src/
+#coffee --join under-development.js --compile --output devlib/ src/*.coffee
+#  'init'
+#  'helper'
+#  'resizer'
+#  'rotater'
+#  'merger'
+#  'adjuster'
+#  'meta'
+#  'simplergba'
+#  'advanced'
+#  'imagefilterswrappers'
+# EVERY A TIME A FILE GETS ADDED; A IT MUST GET ADDED TO THE DEV ENVIEMTNE; TOO
+coffee --join under-development.js --watch --compile --output devlib/ src/init.coffee src/helper.coffee src/resizer.coffee src/rotater.coffee src/merger.coffee src/adjuster.coffee src/meta.coffee src/simplergba.coffee src/advanced.coffee src/imagefilterswrappers.coffee

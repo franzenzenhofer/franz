@@ -72,7 +72,7 @@ Franz.gamma = mF(ImageFilters.Gamma, 2) #between 0 and 3
 #ImageFilters.HSLAdjustment (srcImageData, hueDelta, satDelta, lightness) #beteen -180 and +180
 Franz.HSLAdjustment =mF(ImageFilters.HSLAdjustment, 0, 0, 0)
 #ImageFilters.Invert (srcImageData)
-Franz.invert = mF(ImageFilters.Invert)
+#NOT NOW NAtiVe # Franz.invert = mF(ImageFilters.Invert)
 #ImageFilters.Mosaic (srcImageData, blockSize)
 Franz.mosaic = mF(ImageFilters.Mosaic, 10)
 #ImageFilters.Oil (srcImageData, range, levels)
