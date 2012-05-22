@@ -25,17 +25,21 @@ task 'build', 'Build single application file from source files', ->
       appContents[index] = fileContents
       process() if --remaining is 0
   process = ->
-    fs.writeFile 'lib/dev.coffee', appContents.join('\n\n'), 'utf8', (err) ->
+    fs.writeFile 'lib/staging.coffee', appContents.join('\n\n'), 'utf8', (err) ->
       throw err if err
-      exec 'coffee --compile lib/dev.coffee', (err, stdout, stderr) ->
+      exec 'sed -i "" "s/dlog/#-dlog/g" lib/staging.coffee', (err, stddout, stderr) ->
         throw err if err
-        console.log stdout + stderr
-        fs.unlink 'lib/dev.coffee', (err) ->
+        exec 'sed -i "" "s/##-/#/g" lib/staging.coffee', (err, stddout, stderr) ->
           throw err if err
-          console.log 'Done.'
+          exec 'coffee --compile lib/staging.coffee', (err, stdout, stderr) ->
+            throw err if err
+            console.log stdout + stderr
+            fs.unlink 'lib/staging.coffee', (err) ->
+              throw err if err
+              console.log 'Build staging.js - Done.'
 
 task 'minify', 'Minify the resulting application file after build', ->
-  exec 'java -jar "/Users/franzseo/bin/compiler.jar" --compilation_level SIMPLE_OPTIMIZATIONS --js lib/franz_imagefilters_fork.js lib/dev.js --js_output_file lib/min.js', (err, stdout, stderr) ->
+  exec 'java -jar "/Users/franzseo/bin/compiler.jar" --compilation_level SIMPLE_OPTIMIZATIONS --js lib/franz_imagefilters_fork.js lib/staging.js --js_output_file lib/min.js', (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
 
@@ -45,6 +49,12 @@ task 'minify', 'Minify the resulting application file after build', ->
 #    console.log stdout + stderr
 
 task 'copy', 'copy to franzenzenhofer.github.com/franz/', ->
-  exec 'cp -R /Users/franzseo/dev/franz /Users/franzseo/dev/franzenzenhofer.github.com/', (err, stdout, stderr) ->
+  exec 'cp /Users/franzseo/dev/franz/index.html /Users/franzseo/dev/franzenzenhofer.github.com/franz/', (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
+  exec 'cp /Users/franzseo/dev/franz/test.png /Users/franzseo/dev/franzenzenhofer.github.com/franz/test.png', (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
+  exec 'cp -R /Users/franzseo/dev/franz/lib /Users/franzseo/dev/franzenzenhofer.github.com/franz/', (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr

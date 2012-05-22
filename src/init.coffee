@@ -1,7 +1,7 @@
 #INIT STUFF
 Franz = {};
 window.Franz = Franz
-Franz._DEBUG_ = _DEBUG_ = true;
+_DEBUG_ = true;
 TRUE = true
 FALSE = false
 
